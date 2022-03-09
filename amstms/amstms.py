@@ -43,12 +43,18 @@ class amstms:
             self.cache = cache
         self.services = [self.integrity]
         self.Message = {}
-        self.DefaultPath = {'config': '/etc/AMSTMS/config/config.pkl',
+        self.DefaultPath = {
+                            'config': '/etc/AMSTMS/config/config.pkl',
                             'project': '/etc/AMSTMS/Projects',
                             'backupProject': '/root/AMSTMS/Backup',
                             'backupWorkdir': '/root/AMSTMS/Project',
                             'report': '/var/log/AMSTMS_error'
                             }
+
+        for i in self.DefaultPath:
+            if not os.path.exists(self.DefaultPath[i]):
+                self.new_path(self.DefaultPath[i])
+
 
     def run(self):
         """###### Config LOAD ######"""
@@ -134,7 +140,8 @@ class amstms:
 
         # Already discovered path
         discover = ''
-
+        if path.count('.'):
+            path = str(path).split('/')[:-1]
         if path.count(separate) > 0:
 
             path = path.split(separate)[1:]
